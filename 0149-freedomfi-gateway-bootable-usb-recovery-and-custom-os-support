@@ -1,0 +1,156 @@
+# HIP-0149: FreedomFi Gateway Bootable USB Recovery and Custom OS Support
+
+Author(s):  
+@wicorn29
+
+Start Date:  
+2025-12-26
+
+Category:  
+Core / Hardware Enablement / User Flexibility
+
+Original HIP PR:  
+N/A
+
+Tracking Issue:  
+N/A
+
+## Summary
+
+This HIP proposes the creation of a bootable USB-based recovery system for FreedomFi Gateways, allowing users to reinstall the official stock firmware safely. Since the gateway has USB ports and an exposed HDMI port behind the front shield, it can function as a standard x86 computer. Users should be allowed to install alternative operating systems, such as Magma OS or Linux distributions, with the assurance of returning the device to stock using the official bootable USB recovery image.
+
+## Motivation
+
+### Why are we doing this?
+
+FreedomFi Gateways are fully capable x86 machines. Users currently lack a safe, manufacturer-supported way to recover devices after experimentation, firmware corruption, or OTA failures. They also lack a flexible workflow to run alternative operating systems while preserving the ability to restore Helium network functionality.
+
+Additionally, most gateways purchased new come with outdated firmware that often requires intervention from support personnel to fix. This increases support load, delays deployment, and is not ideal for a network that relies on decentralized participation.
+
+### Problems this solves
+
+- Prevents otherwise functional hardware from becoming bricked or e-waste  
+- Reduces support requests for corrupted, modified, or outdated gateways  
+- Encourages community experimentation without risking Helium network integrity  
+- Supports secondary-market adoption by making devices easier to reset  
+
+### Expected outcome
+
+- Users can flash any OS on the FreedomFi Gateway  
+- Users can restore stock firmware via a bootable USB  
+- On-chain identity and network credentials remain intact during recovery  
+
+## Stakeholders
+
+- Gateway owners and experimenters  
+- Helium Network operators  
+- Nova Labs / FreedomFi support teams  
+- Secondary-market buyers and sellers  
+- HIP governance participants  
+
+Feedback solicitation:  
+- Public HIP discussions on GitHub and Helium Discord (#hardware, #governance)  
+- Targeted outreach to FreedomFi owners and support communities  
+
+## Detailed Explanation
+
+The goal of this HIP is to create a bootable USB recovery system for FreedomFi Gateways that allows owners to safely reinstall the official stock firmware. This system leverages the fact that the gateway is essentially a standard x86 computer with USB ports and an HDMI port (hidden behind the front shield). Users should be able to run alternative operating systems for experimentation while still having confidence that they can restore the device to a Helium-approved state.
+
+### Proposed Solution
+
+1. Bootable USB Recovery Image
+    - Contains the official signed FreedomFi firmware image, including the full Helium gateway OS, configuration defaults, and necessary drivers for the hardware  
+    - Designed to boot the system independently of any corrupted or outdated internal OS  
+    - Verifies image signature and integrity before installation to prevent tampering  
+    - Resets the device to a known, compliant state ready to rejoin the Helium network  
+
+2. Custom OS Support
+    - Users may install alternative operating systems such as Magma OS or other Linux distributions via USB or other media  
+    - Exposed HDMI and USB ports allow standard desktop usage  
+    - At any point, users can restore the device to stock using the bootable USB recovery system, ensuring network integrity and compliance  
+
+3. Recovery Process
+    - User inserts the bootable USB and powers on the gateway  
+    - Gateway boots into recovery mode from the USB  
+    - Recovery system verifies image signature and integrity  
+    - Gateway reinstalls the official firmware  
+    - On-chain credentials, keys, and network identity remain unchanged  
+    - Normal OTA updates resume automatically  
+
+### Representative Use Cases
+
+Example 1: Corrupt OTA Update  
+- OTA update fails or partially installs, leaving the gateway unbootable  
+- Owner uses bootable USB to restore stock firmware  
+- Gateway rejoins network seamlessly  
+
+Example 2: Used Gateway Purchase  
+- Purchased device is stuck on outdated firmware that cannot join the network  
+- Owner boots from USB and restores official firmware  
+- Device becomes fully functional and compliant  
+
+Example 3: Field Deployment Failure  
+- Remotely deployed gateway becomes unresponsive due to firmware corruption  
+- Technician restores device via bootable USB  
+- Gateway resumes network operation without manufacturer intervention  
+
+Example 4: Custom OS Experimentation  
+- User installs an OS like another Linux distribution for testing  
+- Gateway is temporarily offline  
+- User restores official firmware using the bootable USB  
+- Gateway resumes participation in the Helium network, retaining on-chain identity and rewards history  
+
+### Corner Cases
+
+- Invalid or unsigned firmware is rejected by bootloader  
+- Hardware revision mismatch blocks flashing  
+- Repeated misuse triggers rate-limiting  
+- Lost keys are preserved; recovery replaces only the software layer  
+
+## Drawbacks
+
+- Requires signing and maintaining recovery images  
+- Potential misuse
+- Users may inadvertently misconfigure system if OS experimentation is unsupported  
+
+## Rationale and Alternatives
+
+- Encourages experimentation without compromising network integrity  
+- Leverages existing x86 hardware and exposed ports for maximum flexibility  
+- Alternatives considered:  
+  1. OTA-only recovery, rejected because it fails if firmware corrupted  
+  2. Manufacturer-only reflashing, rejected because it is slow and expensive  
+  3. No custom OS support, rejected because it limits testing and educational use  
+
+Not implementing this risks bricked devices, support overload, and lost community trust  
+
+## Unresolved Questions
+
+- Should recovery logs be collected automatically?  
+- Should there be limits on recovery attempts for security?  
+- Should the bootable OS download the latest update or store it inside itself?
+
+Out of scope:  
+- Enabling third-party blockchain use  
+- Custom firmware as part of Helium reward system  
+
+Dependencies / Milestones:  
+- Signed firmware pipeline  
+- Documentation portal updates  
+- Recovery tooling release  
+- Security review  
+
+## Deployment Impact
+
+- Recovery via bootable USB is optional  
+- No immediate impact on stock users  
+- Documentation updates required on docs.helium.com
+
+Backward compatibility: Fully compatible; can be disabled if needed  
+
+## Success Metrics
+
+- Percentage of recovered gateways returning online  
+- Reduction in support tickets related to bricked, modified, or outdated devices  
+- Increased adoption of secondary-market gateways  
+- Fewer permanently offline FreedomFi nodes  
