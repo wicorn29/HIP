@@ -10,7 +10,7 @@ Category:
 Core / Hardware Enablement / User Flexibility
 
 Original HIP PR:  
-Obtaining
+[#1195](https://github.com/helium/HIP/pull/1195)
 
 Tracking Issue:  
 [#1194](https://github.com/helium/HIP/issues/1194)
